@@ -6,12 +6,9 @@
 /*   By: mwane <mwane@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 16:19:11 by mwane             #+#    #+#             */
-/*   Updated: 2022/09/03 20:19:58 by mwane            ###   ########.fr       */
+/*   Updated: 2022/09/11 12:35:45 by mwane            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include <type_traits>
-#include <typeinfo>
 
 namespace ft
 {
@@ -42,12 +39,6 @@ namespace ft
     
     template <>
     struct is_integral_type<char> : public check_type<true, char> {};
-    
-    template <>
-    struct is_integral_type<char16_t> : public check_type<true, char16_t> {};
-    
-    template <>
-    struct is_integral_type<char32_t> : public check_type<true, char32_t> {};
     
     template <>
     struct is_integral_type<wchar_t> : public check_type<true, wchar_t> {};
