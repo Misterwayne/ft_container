@@ -6,11 +6,12 @@
 /*   By: mwane <mwane@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 14:44:25 by mwane             #+#    #+#             */
-/*   Updated: 2022/09/11 14:15:22 by mwane            ###   ########.fr       */
+/*   Updated: 2022/10/15 16:36:01 by mwane            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <tuple>
+#ifndef PAIR_HPP
+#define PAIR_HPP
 
 namespace ft
 {
@@ -28,7 +29,7 @@ namespace ft
             
             pair(const first_type& a, const second_type& b) : first(a), second(b) {};
 
-            ft::pair& operator= (const ft::pair& pr)
+            ft::pair<T1, T2>& operator= (const ft::pair<T1, T2>& pr)
             {
                 if (*this == pr)
                     return (*this);
@@ -94,3 +95,5 @@ namespace ft
         return !(lhs == rhs);
     }
 }
+
+#endif

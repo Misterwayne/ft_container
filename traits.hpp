@@ -6,9 +6,12 @@
 /*   By: mwane <mwane@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 16:19:11 by mwane             #+#    #+#             */
-/*   Updated: 2022/09/11 12:35:45 by mwane            ###   ########.fr       */
+/*   Updated: 2022/10/15 16:37:12 by mwane            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef TRAIT_HPP
+#define TRAIT_HPP
 
 namespace ft
 {
@@ -77,3 +80,5 @@ namespace ft
     template <typename T>
     struct is_integral : is_integral_type<T>{};
 }
+
+#endif

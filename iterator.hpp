@@ -6,17 +6,21 @@
 /*   By: mwane <mwane@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 19:32:06 by mwane             #+#    #+#             */
-/*   Updated: 2022/09/11 19:52:21 by mwane            ###   ########.fr       */
+/*   Updated: 2022/10/16 14:15:17 by mwane            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
+# ifndef RDM_ITERATOR_HPP
+#define RDM_ITERATOR_HPP
+
+#include "traits.hpp"
+#include "utils.hpp"
 #include "iterator_traits.hpp"
 
 namespace ft
 {
     template<class T>
-    class random_access_iterator : public iterator<ft::random_access_iterator_tag, T>
+    class random_access_iterator : public ft::iterator<ft::random_access_iterator_tag, T>
     {
         public :
             typedef typename ft::iterator<ft::random_access_iterator_tag, T>::value_type            value_type;
@@ -424,3 +428,5 @@ namespace ft
         return (lhs.base() - rhs.base());
     }
 }
+
+#endif
