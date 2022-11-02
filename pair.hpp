@@ -6,7 +6,7 @@
 /*   By: mwane <mwane@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 14:44:25 by mwane             #+#    #+#             */
-/*   Updated: 2022/10/15 16:36:01 by mwane            ###   ########.fr       */
+/*   Updated: 2022/11/01 19:47:14 by mwane            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,11 @@ namespace ft
                 pr.second = this->second;
                 this->first = tmp1;
                 this->second = tmp2;
+            }
+
+            second_type   operator->()
+            {
+                return (second);
             }
 
             first_type first;

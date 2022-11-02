@@ -6,7 +6,7 @@
 /*   By: mwane <mwane@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 13:21:43 by mwane             #+#    #+#             */
-/*   Updated: 2022/10/15 16:26:46 by mwane            ###   ########.fr       */
+/*   Updated: 2022/10/21 16:49:43 by mwane            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -471,13 +471,13 @@ namespace ft
 
 
 		private:
-			Allocator   _allocator;
-			pointer     _front;
-			pointer     _back;
-			size_type   _size;
-			size_type   _capacity;
-			size_type   _max_size;
-			pointer     _end;
+			allocator_type   _allocator;
+			pointer     	_front;
+			pointer     	_back;
+			size_type   	_size;
+			size_type   	_capacity;
+			size_type   	_max_size;
+			pointer     	_end;
 
 			void    check_range(const size_type n)
 			{

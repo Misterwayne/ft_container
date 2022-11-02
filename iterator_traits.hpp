@@ -6,13 +6,13 @@
 /*   By: mwane <mwane@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 20:21:34 by mwane             #+#    #+#             */
-/*   Updated: 2022/10/18 17:14:32 by mwane            ###   ########.fr       */
+/*   Updated: 2022/11/02 18:42:19 by mwane            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # ifndef ITERATOR_TRAITS_HPP
 #define ITERATOR_TRAITS_HPP
-
+#include <iostream>
 
 namespace ft
 {
@@ -124,9 +124,240 @@ namespace ft
 			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::pointer           pointer;
 			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::reference         reference;
 			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::iterator_category iterator_category;
+		
+			bidirectional_iterator(pointer min)
+			{
+				_ptr = min;
+			}
+
+			bidirectional_iterator		operator++(int)
+			{
+				bidirectional_iterator tmp = *this;
+				++(*this);
+				return tmp;
+			}
+
+			bidirectional_iterator&		operator++()
+			{
+				pointer parent;
+
+				
+				if (_ptr->is_leaf())
+				{
+					return *this;
+				}
+				
+				parent = _ptr->parent;
+				if (parent->is_leaf())
+				{
+					_ptr = nullptr;
+					return *this;
+				}
+				
+				if ((_ptr == parent->left) && (!parent->right->is_leaf()))
+				{
+					_ptr = parent->right;
+				}
+				else
+				{
+					_ptr = _ptr->parent;
+					return *this;
+				}
+				
+				while (1)
+				{
+					if (!_ptr->left->is_leaf())
+					{
+						_ptr = _ptr->left;
+					}
+					else if (!_ptr->right->is_leaf())
+					{
+						_ptr = _ptr->right;
+					}
+					else
+					{
+						return *this;
+					}
+				}
+			}
+
+			bidirectional_iterator&		operator--()
+			{
+				
+				if (_ptr->left)
+				{
+					_ptr = _ptr->left;
+					while (_ptr->right->right != nullptr)
+					{
+						_ptr = _ptr->right;
+					}
+					return *this;
+				}
+				else
+				{
+					_ptr = _ptr->parent;
+				}
+				return *this;
+			}
+
+			bidirectional_iterator		operator--(int)
+			{
+				
+				bidirectional_iterator tmp = *this;
+				if (_ptr->left)
+				{
+					_ptr = _ptr->left;
+					while (_ptr->right->right != nullptr)
+					{
+						_ptr = _ptr->right;
+					}
+					return tmp;
+				}
+				else
+				{
+					_ptr = _ptr->parent;
+				}
+				return tmp;
+			}
+
+			typename T::data_type		&operator*() const
+			{
+				typename T::data_type		*data;
+
+				data = _ptr->data;
+				return *(data);
+			}
+			
+			typename T::data_type*		operator->() const
+            {
+                return &(operator*());
+            }
+
+			bool operator==(const bidirectional_iterator & other) const
+            {
+                return *_ptr == *other._ptr;
+            }
+            bool operator!=(const bidirectional_iterator & other) const
+            {
+                return !(_ptr == other._ptr);
+            }
+
+			bidirectional_iterator& operator=(const bidirectional_iterator & other)
+			{
+    			this->_ptr = other->_ptr;
+    			return *this;
+			}
+
 		private :
 			pointer _ptr;
 	};
-}
+
+	template <typename T>
+    typename ft::bidirectional_iterator<T>::difference_type
+    operator==(const ft::bidirectional_iterator<T> lhs, const ft::bidirectional_iterator<T> rhs)
+    {
+        return (lhs._ptr == rhs._ptr);
+    }
+
+    template <typename T1, typename T2>
+    typename ft::bidirectional_iterator<T1>::difference_type
+    operator==(const ft::bidirectional_iterator<T1> lhs, const ft::bidirectional_iterator<T2> rhs)
+    {
+        return (lhs._ptr == rhs._ptr);
+    }
+
+    template <typename T>
+    typename ft::bidirectional_iterator<T>::difference_type
+    operator!=(const ft::bidirectional_iterator<T> lhs, const ft::bidirectional_iterator<T> rhs)
+    {
+        return (lhs._ptr != rhs._ptr);
+    }
+
+    template <typename T1, typename T2>
+    typename ft::bidirectional_iterator<T1>::difference_type
+    operator!=(const ft::bidirectional_iterator<T1> lhs, const ft::bidirectional_iterator<T2> rhs)
+    {
+        return (lhs._ptr != rhs._ptr);
+    }
+
+
+    template <typename T>
+    typename ft::bidirectional_iterator<T>::difference_type
+    operator<(const ft::bidirectional_iterator<T> lhs, const ft::bidirectional_iterator<T> rhs)
+    {
+        return (lhs._ptr < rhs._ptr);
+    }
+
+    template <typename T1, typename T2>
+    typename ft::bidirectional_iterator<T1>::difference_type
+    operator<(const ft::bidirectional_iterator<T1> lhs, const ft::bidirectional_iterator<T2> rhs)
+    {
+        return (lhs._ptr < rhs._ptr);
+    }
+
+    template <typename T>
+    typename ft::bidirectional_iterator<T>::difference_type
+    operator>(const ft::bidirectional_iterator<T> lhs, const ft::bidirectional_iterator<T> rhs)
+    {
+        return (lhs._ptr > rhs._ptr);
+    }
+
+    template <typename T1, typename T2>
+    typename ft::bidirectional_iterator<T1>::difference_type
+    operator>(const ft::bidirectional_iterator<T1> lhs, const ft::bidirectional_iterator<T2> rhs)
+    {
+        return (lhs._ptr > rhs._ptr);
+    }
+
+    template <typename T>
+    typename ft::bidirectional_iterator<T>::difference_type
+    operator<=(const ft::bidirectional_iterator<T> lhs, const ft::bidirectional_iterator<T> rhs)
+    {
+        return (lhs._ptr <= rhs._ptr);
+    }
+
+    template <typename T1, typename T2>
+    typename ft::bidirectional_iterator<T1>::difference_type
+    operator<=(const ft::bidirectional_iterator<T1> lhs, const ft::bidirectional_iterator<T2> rhs)
+    {
+        return (lhs._ptr <= rhs._ptr);
+    }
+
+    template <typename T>
+    typename ft::bidirectional_iterator<T>::difference_type
+    operator>=(const ft::bidirectional_iterator<T> lhs, const ft::bidirectional_iterator<T> rhs)
+    {
+        return (lhs._ptr >= rhs._ptr);
+    }
+
+    template <typename T1, typename T2>
+    typename ft::bidirectional_iterator<T1>::difference_type
+    operator>=(const ft::bidirectional_iterator<T1> lhs, const ft::bidirectional_iterator<T2> rhs)
+    {
+        return (lhs._ptr >= rhs._ptr);
+    }
+
+    template <typename T>
+    typename ft::bidirectional_iterator<T>
+    operator+(const typename ft::bidirectional_iterator<T>::difference_type n, ft::bidirectional_iterator<T>& rhs)
+    {
+        return (&(*rhs) + n);
+    }
+
+    template <typename T>
+    typename ft::bidirectional_iterator<T>::difference_type
+    operator-(const ft::bidirectional_iterator<T> lhs, const ft::bidirectional_iterator<T> rhs)
+    {
+        return (lhs._ptr - rhs._ptr);
+    }
+
+    template <typename T1, typename T2>
+    typename ft::bidirectional_iterator<T1>::difference_type
+    operator-(const ft::bidirectional_iterator<T1> lhs, const ft::bidirectional_iterator<T2> rhs)
+    {
+        return (lhs._ptr - rhs._ptr);
+    }
+};
+
 
 #endif
