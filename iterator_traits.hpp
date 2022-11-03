@@ -6,7 +6,7 @@
 /*   By: mwane <mwane@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 20:21:34 by mwane             #+#    #+#             */
-/*   Updated: 2022/11/02 18:42:19 by mwane            ###   ########.fr       */
+/*   Updated: 2022/11/03 19:08:45 by mwane            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,9 +125,11 @@ namespace ft
 			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::reference         reference;
 			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::iterator_category iterator_category;
 		
-			bidirectional_iterator(pointer min)
+			bidirectional_iterator(pointer min, pointer max)
 			{
 				_ptr = min;
+				first = min;
+				last = max;
 			}
 
 			bidirectional_iterator		operator++(int)
@@ -140,45 +142,37 @@ namespace ft
 			bidirectional_iterator&		operator++()
 			{
 				pointer parent;
-
 				
-				if (_ptr->is_leaf())
+				// std::cout << _ptr->data->first << " : gate 1\n";
+				if (_ptr == last)
 				{
-					return *this;
+					_ptr = _ptr->right;
+					// std::cout << "lol\n";
+					return (*this);
 				}
-				
+				// std::cout << "gate 2\n";
 				parent = _ptr->parent;
-				if (parent->is_leaf())
+				if(_ptr->right->is_leaf())
 				{
-					_ptr = nullptr;
-					return *this;
-				}
-				
-				if ((_ptr == parent->left) && (!parent->right->is_leaf()))
-				{
-					_ptr = parent->right;
-				}
-				else
-				{
+					if (parent->right == _ptr)
+					{
+						// std::cout << "gate 3\n";
+						while (_ptr->parent->right == _ptr)
+							_ptr = _ptr->parent;
+					}
 					_ptr = _ptr->parent;
 					return *this;
 				}
-				
-				while (1)
+				else if (!_ptr->right->is_leaf())
 				{
-					if (!_ptr->left->is_leaf())
-					{
+					// std::cout << "gate 4\n";
+					_ptr = _ptr->right;
+					while (!_ptr->left->is_leaf())
 						_ptr = _ptr->left;
-					}
-					else if (!_ptr->right->is_leaf())
-					{
-						_ptr = _ptr->right;
-					}
-					else
-					{
-						return *this;
-					}
+					return *this;
 				}
+				// std::cout << "gate 5\n";
+				return *this;
 			}
 
 			bidirectional_iterator&		operator--()
@@ -250,6 +244,8 @@ namespace ft
 
 		private :
 			pointer _ptr;
+			pointer first;
+			pointer last;
 	};
 
 	template <typename T>
@@ -335,27 +331,6 @@ namespace ft
     operator>=(const ft::bidirectional_iterator<T1> lhs, const ft::bidirectional_iterator<T2> rhs)
     {
         return (lhs._ptr >= rhs._ptr);
-    }
-
-    template <typename T>
-    typename ft::bidirectional_iterator<T>
-    operator+(const typename ft::bidirectional_iterator<T>::difference_type n, ft::bidirectional_iterator<T>& rhs)
-    {
-        return (&(*rhs) + n);
-    }
-
-    template <typename T>
-    typename ft::bidirectional_iterator<T>::difference_type
-    operator-(const ft::bidirectional_iterator<T> lhs, const ft::bidirectional_iterator<T> rhs)
-    {
-        return (lhs._ptr - rhs._ptr);
-    }
-
-    template <typename T1, typename T2>
-    typename ft::bidirectional_iterator<T1>::difference_type
-    operator-(const ft::bidirectional_iterator<T1> lhs, const ft::bidirectional_iterator<T2> rhs)
-    {
-        return (lhs._ptr - rhs._ptr);
     }
 };
 

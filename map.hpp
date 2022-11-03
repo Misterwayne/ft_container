@@ -6,7 +6,7 @@
 /*   By: mwane <mwane@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 15:33:37 by mwane             #+#    #+#             */
-/*   Updated: 2022/11/02 18:44:27 by mwane            ###   ########.fr       */
+/*   Updated: 2022/11/03 19:05:00 by mwane            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,26 +121,31 @@ namespace ft
 				return (_rbt.getValue(key));
 			};
 
+			void	print()
+			{
+				_rbt.inorder(_rbt.root);
+			}
+
 			//Iterator
 
 			iterator begin()
 			{
-				return (iterator(_rbt.FindMin()));
+				return (iterator(_rbt.FindMin(), _rbt.FindMax()));
 			}
 
 			const_iterator begin() const
 			{
-				return (const_iterator(_rbt.FindMin()));
+				return (const_iterator(_rbt.FindMin(), _rbt.FindMax()));
 			}
 
 			iterator end()
 			{
-				return (iterator(_rbt.FindMax()->right));
+				return (iterator(_rbt.FindMax()->right, nullptr));
 			};
 
 			const_iterator end() const
 			{
-				return (const_iterator(_rbt.FindMin()->right));
+				return (const_iterator(_rbt.FindMin()->right, nullptr));
 			};
 
 			reverse_iterator rbegin();
