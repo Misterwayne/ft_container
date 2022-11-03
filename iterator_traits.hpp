@@ -6,7 +6,7 @@
 /*   By: mwane <mwane@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 20:21:34 by mwane             #+#    #+#             */
-/*   Updated: 2022/11/03 19:08:45 by mwane            ###   ########.fr       */
+/*   Updated: 2022/11/03 19:36:31 by mwane            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,41 +177,51 @@ namespace ft
 
 			bidirectional_iterator&		operator--()
 			{
+				pointer parent;
 				
-				if (_ptr->left)
+				std::cout << _ptr->data->first << " : gate 1\n";
+				if (_ptr == first->parent)
 				{
-					_ptr = _ptr->left;
-					while (_ptr->right->right != nullptr)
+					_ptr = first;
+					std::cout << "lol\n";
+					return (*this);
+				}
+				else if (_ptr == last->right)
+				{
+					// std::cout << "lol\n";
+					_ptr = last;
+					return (*this);
+				}
+				// std::cout << "gate 2\n";
+				parent = _ptr->parent;
+				if(_ptr->left->is_leaf())
+				{
+					if (parent->left == _ptr)
 					{
-						_ptr = _ptr->right;
+						// std::cout << "gate 3\n";
+						while (_ptr->parent->left == _ptr)
+							_ptr = _ptr->parent;
 					}
+					_ptr = _ptr->parent;
 					return *this;
 				}
-				else
+				else if (!_ptr->left->is_leaf())
 				{
-					_ptr = _ptr->parent;
+					// std::cout << "gate 4\n";
+					_ptr = _ptr->left;
+					while (!_ptr->right->is_leaf())
+						_ptr = _ptr->right;
+					return *this;
 				}
+				// std::cout << "gate 5\n";
 				return *this;
 			}
 
 			bidirectional_iterator		operator--(int)
 			{
-				
 				bidirectional_iterator tmp = *this;
-				if (_ptr->left)
-				{
-					_ptr = _ptr->left;
-					while (_ptr->right->right != nullptr)
-					{
-						_ptr = _ptr->right;
-					}
-					return tmp;
-				}
-				else
-				{
-					_ptr = _ptr->parent;
-				}
-				return tmp;
+				--(*this);
+				return (tmp);
 			}
 
 			typename T::data_type		&operator*() const
