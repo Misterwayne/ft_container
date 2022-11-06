@@ -6,7 +6,7 @@
 /*   By: mwane <mwane@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 15:33:37 by mwane             #+#    #+#             */
-/*   Updated: 2022/11/03 19:17:40 by mwane            ###   ########.fr       */
+/*   Updated: 2022/11/06 15:00:05 by mwane            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ namespace ft
 		public :
 			typedef Key                         							key_type;
 			typedef T                           							mapped_type;
-			typedef std::pair<const Key, T>     							value_type;
+			typedef std::pair<Key, T>     									value_type;
 			typedef RBSTnode<key_type, mapped_type>							Node;
 			typedef typename std::size_t									size_type;
 			typedef typename std::ptrdiff_t									difference_type;
@@ -66,7 +66,7 @@ namespace ft
 			size_type 				_max_size;
 			Tree					_rbt;
 
-			map() : _rbt(Tree())
+			map() : _rbt(Tree()), _alloc(Allocator()), _comp(Compare())
 			{
 				
 			};
@@ -79,22 +79,27 @@ namespace ft
 			template< class InputIt >
 			map( InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator() ) : _comp(comp), _alloc(alloc), _rbt(Tree())
 			{
-
+				insert<InputIt>(first, last);
 			};
 
 			map( const map& other ) : _comp(other.comp), _alloc(other.alloc), _rbt(other._rbt)
 			{
-				
+				_size = other._size;
+				_max_size = other._max_size;
+				insert(other.begin(), other.end());
 			};
 
 			~map()
 			{
-
+				clear();
 			};
 
 			map& operator=( const map& other )
 			{
-			
+				_rbt = other._rbt;
+				_alloc = other._alloc;
+				_size = other._size;
+				_max_size = other._max_size;
 			}
 
 			allocator_type get_allocator() const
@@ -145,7 +150,7 @@ namespace ft
 
 			const_iterator end() const
 			{
-				return (const_iterator(_rbt.FindMin()->right, nullptr));
+				return (const_iterator(_rbt.FindMax()->right, nullptr));
 			};
 
 			reverse_iterator rbegin();
@@ -168,30 +173,51 @@ namespace ft
 			size_type size() const
 			{
 				return (_size);
-			};
+			}
 
 			size_type max_size() const
 			{
 				return (_max_size);
-			};
+			}
 			
 			//Modifier
 			
-			void clear();
+			void clear()
+			{
+				erase(begin(), end());
+			};
 
 			ft::pair<iterator, bool> insert( const value_type& value )
 			{
-				
-			};
+				_rbt.Insert(value.first, value.second);
+				_size++;
+				return (ft::pair<iterator, bool>(begin(), true));
+			}
 
-			iterator insert( iterator hint, const value_type& value );
+			iterator insert( iterator hint, const value_type& value )
+			{
+				insert(value);
+				return (hint);
+			}
 
 			template< class InputIt >
-			void insert( InputIt first, InputIt last );
+			void insert( InputIt first, InputIt last )
+			{
+				for(; first != last; first++, _size++)
+					insert(last, value_type(first->first, first->second));
+			}
 
-			void erase( iterator pos );
+			void erase( iterator pos )
+			{
+				_rbt.Remove(pos->first);
+				_size--;
+			}
 
-			void erase( iterator first, iterator last );
+			void erase( iterator first, iterator last )
+			{
+				for(;first != last;first++, _size++)
+					erase(first);
+			}
 
 			void swap( map& other );
 
@@ -202,9 +228,14 @@ namespace ft
 				if (_rbt.Search(key))
 					return (1);
 				return (0);
-			};
+			}
 
-			const_iterator find( const Key& key ) const;
+			// const_iterator find( const Key& key ) const
+			// {
+			// 	Node *tmp = _rbt.FindMax();
+			// 	// Node *tmp2 = _rbt.root;
+			// 	return (const_iterator(_rbt.root, _rbt.FindMax()));
+			// }
 
 			std::pair<iterator,iterator> equal_range( const Key& key );
 
