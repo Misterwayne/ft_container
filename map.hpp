@@ -6,7 +6,7 @@
 /*   By: mwane <mwane@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 15:33:37 by mwane             #+#    #+#             */
-/*   Updated: 2022/11/06 15:00:05 by mwane            ###   ########.fr       */
+/*   Updated: 2022/11/07 19:34:21 by mwane            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ namespace ft
 		public :
 			typedef Key                         							key_type;
 			typedef T                           							mapped_type;
-			typedef std::pair<Key, T>     									value_type;
+			typedef ft::pair<Key, T>     									value_type;
 			typedef RBSTnode<key_type, mapped_type>							Node;
 			typedef typename std::size_t									size_type;
 			typedef typename std::ptrdiff_t									difference_type;
@@ -153,11 +153,20 @@ namespace ft
 				return (const_iterator(_rbt.FindMax()->right, nullptr));
 			};
 
-			reverse_iterator rbegin();
+			reverse_iterator rbegin()
+			{
+				return reverse_iterator(iterator(_rbt.FindMax(), _rbt.FindMin()));
+			};
 
-			const_reverse_iterator rbegin() const;
+			const_reverse_iterator rbegin() const
+			{
+				return const_reverse_iterator(iterator(_rbt.FindMax(), _rbt.FindMin()));
+			};
 
-			reverse_iterator rend();
+			reverse_iterator rend()
+			{
+				return reverse_iterator(iterator(_rbt.FindMin()->left, nullptr));
+			};
 
 			const_reverse_iterator rend() const;
 			
@@ -200,22 +209,27 @@ namespace ft
 				return (hint);
 			}
 
-			template< class InputIt >
+			template< class InputIt = ft::bidirectional_iterator<Node> >
 			void insert( InputIt first, InputIt last )
 			{
-				for(; first != last; first++, _size++)
-					insert(last, value_type(first->first, first->second));
+				for(; first != last; first++)
+					insert(first, value_type(first->first, first->second));
+			}
+
+			size_type erase( const Key& key )
+			{
+				return(_rbt.Remove(key));
 			}
 
 			void erase( iterator pos )
 			{
-				_rbt.Remove(pos->first);
+				erase(pos->first);
 				_size--;
 			}
 
 			void erase( iterator first, iterator last )
 			{
-				for(;first != last;first++, _size++)
+				for(;first != last; first++)
 					erase(first);
 			}
 
@@ -230,28 +244,65 @@ namespace ft
 				return (0);
 			}
 
-			// const_iterator find( const Key& key ) const
-			// {
-			// 	Node *tmp = _rbt.FindMax();
-			// 	// Node *tmp2 = _rbt.root;
-			// 	return (const_iterator(_rbt.root, _rbt.FindMax()));
-			// }
+			const_iterator find( const Key& key ) const
+			{
+				Node *tmp2 = _rbt.root;
+				return (const_iterator(_rbt.Search(tmp2, key), _rbt.FindMax()->right));
+			}
 
-			std::pair<iterator,iterator> equal_range( const Key& key );
+			std::pair<iterator,iterator> equal_range( const Key& key )
+			{
+				return ft::make_pair(lower_bound(key), upper_bound(key));
+			};
 
-			std::pair<const_iterator,const_iterator> equal_range( const Key& key ) const;
+			std::pair<const_iterator,const_iterator> equal_range( const Key& key ) const
+			{
+				return ft::make_pair(lower_bound(key), upper_bound(key));
+			};
 
-			iterator lower_bound( const Key& key );
+			iterator lower_bound( const Key& key )
+			{
+				iterator it = begin();
 
-			const_iterator lower_bound( const Key& key ) const;
+				for(;it != end();it++)
+				{
+					if (_comp(it->first, key) == false)
+						break;
+				}
+				return (it);
+			};
 
-			iterator upper_bound( const Key& key );
+			const_iterator lower_bound( const Key& key ) const
+			{
+				return (const_iterator(lower_bound(key)));
+			};
 
-			const_iterator upper_bound( const Key& key ) const;
+			iterator upper_bound( const Key& key )
+			{
+				iterator it = begin();
 
-			key_compare key_comp() const;
+				for(;it != end();it++)
+				{
+					if (_comp(key, it->first))
+						break;
+				}
+				return (it);
+			};
 
-			value_compare value_comp() const;
+			const_iterator upper_bound( const Key& key ) const
+			{
+				return (const_iterator(upper_bound(key)));
+			};
+
+			key_compare key_comp() const
+			{
+				return key_compare();
+			};
+
+			value_compare value_comp() const
+			{
+				return value_compare(key_compare());
+			};
 	};
 
 	// template< class Key, class T, class Compare, class Alloc >

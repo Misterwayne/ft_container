@@ -6,7 +6,7 @@
 /*   By: mwane <mwane@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 20:21:34 by mwane             #+#    #+#             */
-/*   Updated: 2022/11/03 19:36:31 by mwane            ###   ########.fr       */
+/*   Updated: 2022/11/06 19:35:41 by mwane            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,10 @@ namespace ft
 				last = max;
 			}
 
+			virtual  ~bidirectional_iterator()
+			{
+			};
+
 			bidirectional_iterator		operator++(int)
 			{
 				bidirectional_iterator tmp = *this;
@@ -248,9 +252,11 @@ namespace ft
 
 			bidirectional_iterator& operator=(const bidirectional_iterator & other)
 			{
-    			this->_ptr = other->_ptr;
-    			return *this;
-			}
+                if (this == &other)
+                    return (*this);
+                _ptr  = other._ptr;
+                return (*this);
+            }
 
 		private :
 			pointer _ptr;
