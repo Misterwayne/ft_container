@@ -6,7 +6,7 @@
 /*   By: mwane <mwane@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 15:33:37 by mwane             #+#    #+#             */
-/*   Updated: 2022/11/08 20:43:54 by mwane            ###   ########.fr       */
+/*   Updated: 2022/11/08 20:54:08 by mwane            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,7 +236,27 @@ namespace ft
 					erase(first->first);
 			}
 
-			void swap( map& other );
+			void swap( map& other )
+			{
+				key_compare				tmp_comp = other._comp;
+				allocator_type			tmp_alloc = other._alloc;
+				size_type 				tmp_size = other._size;;
+				size_type 				tmp_max_size = other._max_size;
+				Tree					tmp_rbt = other._rbt;
+
+				other._comp = value_compare();
+				other._alloc = _alloc;
+				other._size = _size;
+				other._max_size = _max_size;
+				other._rbt = _rbt;
+
+				_rbt = tmp_rbt;
+				_comp = tmp_comp;
+				_size = tmp_size;
+				_max_size = tmp_max_size;
+				_alloc = tmp_alloc;
+
+			};
 
 			//Lookup
 
