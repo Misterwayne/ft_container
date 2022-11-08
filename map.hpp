@@ -6,7 +6,7 @@
 /*   By: mwane <mwane@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 15:33:37 by mwane             #+#    #+#             */
-/*   Updated: 2022/11/07 19:34:21 by mwane            ###   ########.fr       */
+/*   Updated: 2022/11/08 20:43:54 by mwane            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,17 +68,18 @@ namespace ft
 
 			map() : _rbt(Tree()), _alloc(Allocator()), _comp(Compare())
 			{
-				
+				_size = 0;
 			};
 
 			explicit map( const Compare& comp, const Allocator& alloc = Allocator() ) : _comp(comp), _alloc(alloc), _rbt(Tree())
 			{
-
+				_size = 0;
 			};
 
 			template< class InputIt >
 			map( InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator() ) : _comp(comp), _alloc(alloc), _rbt(Tree())
 			{
+				_size = 0;
 				insert<InputIt>(first, last);
 			};
 
@@ -92,6 +93,7 @@ namespace ft
 			~map()
 			{
 				clear();
+				erase(begin());
 			};
 
 			map& operator=( const map& other )
@@ -193,7 +195,8 @@ namespace ft
 			
 			void clear()
 			{
-				erase(begin(), end());
+				while (_size != 2)
+					erase(begin());
 			};
 
 			ft::pair<iterator, bool> insert( const value_type& value )
@@ -230,7 +233,7 @@ namespace ft
 			void erase( iterator first, iterator last )
 			{
 				for(;first != last; first++)
-					erase(first);
+					erase(first->first);
 			}
 
 			void swap( map& other );
@@ -305,39 +308,39 @@ namespace ft
 			};
 	};
 
-	// template< class Key, class T, class Compare, class Alloc >
-	// bool operator==( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
-	// {
-	// 	return (lhs);
-	// };
+	template< class Key, class T, class Compare, class Alloc >
+	bool operator==( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
+	{
+		return (lhs._rbt == rhs._rbt);
+	};
 
-	// template< class Key, class T, class Compare, class Alloc >
-	// bool operator!=( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
-	// {
-	// 	return ();
-	// };
+	template< class Key, class T, class Compare, class Alloc >
+	bool operator!=( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
+	{
+		return (!lhs._rbt == rhs._rbt);
+	};
 
-	// template< class Key, class T, class Compare, class Alloc >
-	// bool operator<( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
-	// {
+	template< class Key, class T, class Compare, class Alloc >
+	bool operator<( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
+	{
+		return (lhs.size() < rhs.size());
+	};
 
-	// };
+	template< class Key, class T, class Compare, class Alloc >
+	bool operator<=( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
+	{
+		return (lhs.size() <= rhs.size());
+	};
 
-	// template< class Key, class T, class Compare, class Alloc >
-	// bool operator<=( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
-	// {
+	template< class Key, class T, class Compare, class Alloc >
+	bool operator>( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
+	{
+		return (lhs.size() > rhs.size());
+	};
 
-	// };
-
-	// template< class Key, class T, class Compare, class Alloc >
-	// bool operator>( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
-	// {
-
-	// };
-
-	// template< class Key, class T, class Compare, class Alloc >
-	// bool operator>=( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
-	// {
-
-	// };
+	template< class Key, class T, class Compare, class Alloc >
+	bool operator>=( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
+	{
+		return (lhs.size() >= rhs.size());
+	};
 }
