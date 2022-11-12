@@ -6,7 +6,7 @@
 /*   By: mwane <mwane@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 20:21:34 by mwane             #+#    #+#             */
-/*   Updated: 2022/11/06 19:35:41 by mwane            ###   ########.fr       */
+/*   Updated: 2022/11/08 20:57:17 by mwane            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,9 +132,7 @@ namespace ft
 				last = max;
 			}
 
-			virtual  ~bidirectional_iterator()
-			{
-			};
+			virtual  ~bidirectional_iterator() {}
 
 			bidirectional_iterator		operator++(int)
 			{
@@ -147,20 +145,16 @@ namespace ft
 			{
 				pointer parent;
 				
-				// std::cout << _ptr->data->first << " : gate 1\n";
 				if (_ptr == last)
 				{
 					_ptr = _ptr->right;
-					// std::cout << "lol\n";
 					return (*this);
 				}
-				// std::cout << "gate 2\n";
 				parent = _ptr->parent;
 				if(_ptr->right->is_leaf())
 				{
 					if (parent->right == _ptr)
 					{
-						// std::cout << "gate 3\n";
 						while (_ptr->parent->right == _ptr)
 							_ptr = _ptr->parent;
 					}
@@ -169,13 +163,11 @@ namespace ft
 				}
 				else if (!_ptr->right->is_leaf())
 				{
-					// std::cout << "gate 4\n";
 					_ptr = _ptr->right;
 					while (!_ptr->left->is_leaf())
 						_ptr = _ptr->left;
 					return *this;
 				}
-				// std::cout << "gate 5\n";
 				return *this;
 			}
 
@@ -183,26 +175,21 @@ namespace ft
 			{
 				pointer parent;
 				
-				std::cout << _ptr->data->first << " : gate 1\n";
 				if (_ptr == first->parent)
 				{
 					_ptr = first;
-					std::cout << "lol\n";
 					return (*this);
 				}
 				else if (_ptr == last->right)
 				{
-					// std::cout << "lol\n";
 					_ptr = last;
 					return (*this);
 				}
-				// std::cout << "gate 2\n";
 				parent = _ptr->parent;
 				if(_ptr->left->is_leaf())
 				{
 					if (parent->left == _ptr)
 					{
-						// std::cout << "gate 3\n";
 						while (_ptr->parent->left == _ptr)
 							_ptr = _ptr->parent;
 					}
@@ -211,13 +198,11 @@ namespace ft
 				}
 				else if (!_ptr->left->is_leaf())
 				{
-					// std::cout << "gate 4\n";
 					_ptr = _ptr->left;
 					while (!_ptr->right->is_leaf())
 						_ptr = _ptr->right;
 					return *this;
 				}
-				// std::cout << "gate 5\n";
 				return *this;
 			}
 
